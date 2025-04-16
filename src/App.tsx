@@ -6,7 +6,7 @@ import {
   Outlet,
 } from 'react-router-dom';
 import './main.css';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { AuthProvider } from './context/AuthContext';
 import { useContext } from 'react';
 import { AuthContext } from './context/AuthContext';
@@ -26,11 +26,14 @@ import Register from './pages/auth/Register';
 // import TripDashboard from './pages/trip/TripDashboard';
 import CreateTrip from './pages/trip/CreateTrip';
 import Dashboard from './pages/user/Dashboard';
+import { GlobalProvider } from './context/GlobalContext';
+import TripDashboard from './pages/trip/TripDashboard';
+import TripAgenda from './pages/trip/components/trip-agenda/TripAgenda';
 
 // ProtectedRoute component with TypeScript
 const ProtectedRoute = ({ children }: { children: ReactNode }) => {
-  const { isAuthenticated, isLoading } = useContext(AuthContext);
-
+  const { isLoading } = useContext(AuthContext);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -50,60 +53,66 @@ const ProtectedRoute = ({ children }: { children: ReactNode }) => {
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          {/* Public home route */}
-          <Route
-            path='/'
-            element={<Home />}
-          />
+      <GlobalProvider>
+        <BrowserRouter>
+          <Routes>
+            {/* Public home route */}
+            <Route
+              path='/'
+              element={<Home />}
+            />
 
-          {/* Auth routes */}
-          <Route element={<AuthLayout />}>
-            <Route
-              path='/login'
-              element={<Login />}
-            />
-            <Route
-              path='/register'
-              element={<Register />}
-            />
-          </Route>
+            {/* Auth routes */}
+            <Route element={<AuthLayout />}>
+              <Route
+                path='/login'
+                element={<Login />}
+              />
+              <Route
+                path='/register'
+                element={<Register />}
+              />
+            </Route>
 
-          {/* Protected routes */}
-          <Route
-            path='/dashboard'
-            element={
-              <ProtectedRoute>
-                <MainLayout />
-              </ProtectedRoute>
-            }
-          >
+            {/* Protected routes */}
             <Route
-              index
-              element={<Dashboard />}
-            />
-            {/* <Route
+              path='/dashboard'
+              element={
+                <ProtectedRoute>
+                  <MainLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route
+                index
+                element={<Dashboard />}
+              />
+              {/* <Route
               path='profile'
               element={<Profile />}
             /> */}
-            <Route
-              path='trip/new'
-              element={<CreateTrip />}
-            />
-            {/* <Route
-              path='trip/:tripId'
-              element={<TripDashboard />}
-            /> */}
-          </Route>
+              <Route
+                path='trip/new'
+                element={<CreateTrip />}
+              />
+              <Route
+                path='trip/:tripId'
+                element={<TripDashboard />}
+              />
+              <Route
+                path='trip/:tripId/agenda'
+                element={<TripAgenda />}
+              />
+            </Route>
 
-          {/* Catch all - 404 */}
-          <Route
-            path='*'
-            element={<NotFound />}
-          />
-        </Routes>
-      </BrowserRouter>
+            {/* Catch all - 404 */}
+            <Route
+              path='*'
+              element={<NotFound />}
+            />
+          </Routes>
+        </BrowserRouter>
+      </GlobalProvider>
     </AuthProvider>
   );
 }

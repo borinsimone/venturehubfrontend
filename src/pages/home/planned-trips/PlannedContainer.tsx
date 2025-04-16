@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Next from './Next';
 import Prev from './Prev';
+import { AnimatePresence } from 'framer-motion';
 // import '../';
 function PlannedContainer() {
   const [activeTab, setActiveTab] = useState('next');
@@ -21,7 +22,9 @@ function PlannedContainer() {
           recenti
         </span>
       </div>
-      {activeTab === 'next' ? <Next /> : <Prev />}
+      <AnimatePresence mode='wait'>
+        {activeTab === 'next' ? <Next /> : <Prev />}
+      </AnimatePresence>
     </div>
   );
 }

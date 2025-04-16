@@ -9,7 +9,7 @@ const MainLayout = () => {
 
   return (
     <div className='app-container'>
-      <header className='app-header'>
+      {/* <header className='app-header'>
         <div className='logo'>
           <NavLink to='/'>VentureHub</NavLink>
         </div>
@@ -32,15 +32,15 @@ const MainLayout = () => {
             </button>
           </div>
         </nav>
-      </header>
+      </header> */}
 
       <main className='main-content'>
         <Outlet />
       </main>
 
-      <footer className='app-footer'>
+      {/* <footer className='app-footer'>
         <p>© 2025 VentureHub - Plan your adventures together</p>
-      </footer>
+      </footer> */}
     </div>
   );
 };

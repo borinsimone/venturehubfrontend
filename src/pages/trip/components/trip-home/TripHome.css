@@ -1,0 +1,203 @@
+@charset "UTF-8";
+.trip-dashboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.trip-home-container {
+  width: 100%;
+}
+.trip-home-container .trip-overview-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+@media (min-width: 768px) {
+  .trip-home-container .trip-overview-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 1024px) {
+  .trip-home-container .trip-overview-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.trip-home-container .overview-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.25rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.trip-home-container .overview-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+.trip-home-container .overview-card h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #2c3e50;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  padding-bottom: 0.75rem;
+}
+.trip-home-container .weather-card {
+  background: linear-gradient(to bottom right, #3498db, #2980b9);
+  color: white;
+}
+.trip-home-container .weather-card h2 {
+  color: white;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+.trip-home-container .weather-card .weather-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.trip-home-container .weather-card .weather-info .weather-temp {
+  font-size: 2.5rem;
+  font-weight: 300;
+  margin-bottom: 0.5rem;
+}
+.trip-home-container .weather-card .weather-info .weather-condition {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+.trip-home-container .weather-card .weather-info .weather-details {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  margin-top: 0.75rem;
+  opacity: 0.9;
+}
+.trip-home-container .event-card {
+  border-left: 4px solid #2ecc71;
+}
+.trip-home-container .event-card .event-info h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #2c3e50;
+}
+.trip-home-container .event-card .event-info p {
+  color: #95a5a6;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+.trip-home-container .event-card .event-info p:last-child {
+  font-weight: 500;
+  color: #2c3e50;
+}
+.trip-home-container .balance-card .balance-total {
+  background-color: rgba(0, 0, 0, 0.04);
+  padding: 0.75rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+.trip-home-container .balance-card .balance-total p {
+  font-weight: 600;
+  color: #2c3e50;
+}
+.trip-home-container .balance-card .balance-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.trip-home-container .balance-card .balance-list .balance-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+.trip-home-container .balance-card .balance-list .balance-item:last-child {
+  border-bottom: none;
+}
+.trip-home-container .balance-card .balance-list .balance-item.positive span:last-child {
+  color: #2ecc71;
+  font-weight: 600;
+}
+.trip-home-container .balance-card .balance-list .balance-item.negative span:last-child {
+  color: #e74c3c;
+  font-weight: 600;
+}
+.trip-home-container .todo-card .todo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.trip-home-container .todo-card .todo-list .todo-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background-color: rgba(0, 0, 0, 0.02);
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+.trip-home-container .todo-card .todo-list .todo-item:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+.trip-home-container .todo-card .todo-list .todo-item input[type=checkbox] {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #3498db;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.trip-home-container .todo-card .todo-list .todo-item input[type=checkbox]:checked {
+  background-color: #3498db;
+  position: relative;
+}
+.trip-home-container .todo-card .todo-list .todo-item input[type=checkbox]:checked::after {
+  content: "✓";
+  color: white;
+  font-size: 0.75rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.trip-home-container .todo-card .todo-list .todo-item .completed {
+  text-decoration: line-through;
+  color: #95a5a6;
+}
+@media (min-width: 768px) {
+  .trip-home-container {
+    padding: 1rem;
+  }
+  .trip-home-container .overview-card h2 {
+    font-size: 1.2rem;
+  }
+  .trip-home-container .weather-card .weather-info .weather-temp {
+    font-size: 3rem;
+  }
+  .trip-home-container .weather-card .weather-info .weather-condition {
+    font-size: 1.4rem;
+  }
+  .trip-home-container .event-card .event-info h3 {
+    font-size: 1.3rem;
+  }
+}
+@media (min-width: 1024px) {
+  .trip-home-container {
+    padding: 1.5rem;
+  }
+  .trip-home-container .trip-overview-grid {
+    gap: 1.5rem;
+  }
+  .trip-home-container .overview-card {
+    padding: 1.5rem;
+  }
+}/*# sourceMappingURL=TripHome.css.map */

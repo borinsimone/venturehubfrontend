@@ -1,0 +1,262 @@
+.trip-dashboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+
+  width: 100%;
+
+  //   height: 100vh;
+  //   height: 100dvh;
+  //   overflow: hidden;
+}
+
+// Import variables from trip.scss if needed
+// Variables from parent styles
+$trip-primary: #3498db;
+$trip-secondary: #2ecc71;
+$trip-danger: #e74c3c;
+$trip-dark: #2c3e50;
+$trip-light: #ecf0f1;
+$trip-accent: #e74c3c;
+$trip-gray: #95a5a6;
+$trip-white: #ffffff;
+
+.trip-home-container {
+  width: 100%;
+  .trip-overview-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (min-width: 1024px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .overview-card {
+    background-color: $trip-white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 1.25rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: $trip-dark;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      padding-bottom: 0.75rem;
+    }
+  }
+
+  // Weather card styles
+  .weather-card {
+    background: linear-gradient(to bottom right, #3498db, #2980b9);
+    color: white;
+
+    h2 {
+      color: white;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .weather-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .weather-temp {
+        font-size: 2.5rem;
+        font-weight: 300;
+        margin-bottom: 0.5rem;
+      }
+
+      .weather-condition {
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+      }
+
+      .weather-details {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.9rem;
+        margin-top: 0.75rem;
+        opacity: 0.9;
+      }
+    }
+  }
+
+  // Event card styles
+  .event-card {
+    border-left: 4px solid $trip-secondary;
+
+    .event-info {
+      h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: $trip-dark;
+      }
+
+      p {
+        color: $trip-gray;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+
+        &:last-child {
+          font-weight: 500;
+          color: $trip-dark;
+        }
+      }
+    }
+  }
+
+  // Balance card styles
+  .balance-card {
+    .balance-total {
+      background-color: rgba(0, 0, 0, 0.04);
+      padding: 0.75rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+
+      p {
+        font-weight: 600;
+        color: $trip-dark;
+      }
+    }
+
+    .balance-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+
+      .balance-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        &.positive span:last-child {
+          color: $trip-secondary;
+          font-weight: 600;
+        }
+
+        &.negative span:last-child {
+          color: $trip-danger;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+
+  // Todo card styles
+  .todo-card {
+    .todo-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      .todo-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem;
+        background-color: rgba(0, 0, 0, 0.02);
+        border-radius: 8px;
+        transition: background-color 0.2s;
+
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.04);
+        }
+
+        input[type='checkbox'] {
+          appearance: none;
+          width: 18px;
+          height: 18px;
+          border: 2px solid $trip-primary;
+          border-radius: 4px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+
+          &:checked {
+            background-color: $trip-primary;
+            position: relative;
+
+            &::after {
+              content: '✓';
+              color: white;
+              font-size: 0.75rem;
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+            }
+          }
+        }
+
+        .completed {
+          text-decoration: line-through;
+          color: $trip-gray;
+        }
+      }
+    }
+  }
+
+  // Responsive adjustments
+  @media (min-width: 768px) {
+    padding: 1rem;
+
+    .overview-card {
+      h2 {
+        font-size: 1.2rem;
+      }
+    }
+
+    .weather-card {
+      .weather-info {
+        .weather-temp {
+          font-size: 3rem;
+        }
+
+        .weather-condition {
+          font-size: 1.4rem;
+        }
+      }
+    }
+
+    .event-card .event-info h3 {
+      font-size: 1.3rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    padding: 1.5rem;
+
+    .trip-overview-grid {
+      gap: 1.5rem;
+    }
+
+    .overview-card {
+      padding: 1.5rem;
+    }
+  }
+}
