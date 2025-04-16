@@ -384,6 +384,34 @@ $trip-white: #ffffff;
       border-radius: 8px;
     }
 
+    .activity-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      .activity-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        color: #666;
+        font-size: 1.2rem;
+      }
+
+      h4 {
+        margin: 0;
+      }
+    }
+
+    &.past-activity .activity-icon {
+      color: #aaa;
+    }
+
+    &.current-activity .activity-icon {
+      color: #3498db;
+    }
+
     .activity-indicators {
       display: flex;
       align-items: center;
@@ -434,36 +462,31 @@ $trip-white: #ffffff;
       }
     }
 
-    .activity-title {
+    .activity-header {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 8px;
 
-      .activity-icon {
+      .activity-title {
         display: flex;
         align-items: center;
-        justify-content: center;
-        width: 24px;
-        height: 24px;
-        color: #666;
+        gap: 8px;
 
-        // For past activities, change icon color
-        .past-activity & {
-          color: #aaa;
+        .activity-icon {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 24px;
+          height: 24px;
+          color: #666;
+          font-size: 1.2rem;
         }
 
-        // For current activities, highlight the icon
-        .current-activity & {
-          color: #3498db;
+        h4 {
+          margin: 0;
         }
       }
     }
-  }
-
-  .activity-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
   }
 
   .activity-content {

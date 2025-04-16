@@ -302,6 +302,29 @@
   background-color: rgba(0, 0, 0, 0.02);
   border-radius: 8px;
 }
+.agenda-tab .activity-item .activity-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.agenda-tab .activity-item .activity-title .activity-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: #666;
+  font-size: 1.2rem;
+}
+.agenda-tab .activity-item .activity-title h4 {
+  margin: 0;
+}
+.agenda-tab .activity-item.past-activity .activity-icon {
+  color: #aaa;
+}
+.agenda-tab .activity-item.current-activity .activity-icon {
+  color: #3498db;
+}
 .agenda-tab .activity-item .activity-indicators {
   display: flex;
   align-items: center;
@@ -345,29 +368,27 @@
 .agenda-tab .activity-item .activity-expanded-content .mark-completed-btn:hover {
   background-color: #3e8e41;
 }
-.agenda-tab .activity-item .activity-title {
+.agenda-tab .activity-item .activity-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.agenda-tab .activity-item .activity-header .activity-title {
   display: flex;
   align-items: center;
   gap: 8px;
 }
-.agenda-tab .activity-item .activity-title .activity-icon {
+.agenda-tab .activity-item .activity-header .activity-title .activity-icon {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 24px;
   height: 24px;
   color: #666;
+  font-size: 1.2rem;
 }
-.past-activity .agenda-tab .activity-item .activity-title .activity-icon {
-  color: #aaa;
-}
-.current-activity .agenda-tab .activity-item .activity-title .activity-icon {
-  color: #3498db;
-}
-.agenda-tab .activity-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.agenda-tab .activity-item .activity-header .activity-title h4 {
+  margin: 0;
 }
 .agenda-tab .activity-content {
   padding: 10px;

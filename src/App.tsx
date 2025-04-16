@@ -29,6 +29,7 @@ import Dashboard from './pages/user/Dashboard';
 import { GlobalProvider } from './context/GlobalContext';
 import TripDashboard from './pages/trip/TripDashboard';
 import TripAgenda from './pages/trip/components/trip-agenda/TripAgenda';
+import TripBudget from './pages/trip/components/trip-budget/TripBudget';
 
 // ProtectedRoute component with TypeScript
 const ProtectedRoute = ({ children }: { children: ReactNode }) => {
@@ -102,6 +103,10 @@ function App() {
               <Route
                 path='trip/:tripId/agenda'
                 element={<TripAgenda />}
+              />
+              <Route
+                path='trip/:tripId/budget'
+                element={<TripBudget />}
               />
             </Route>
 

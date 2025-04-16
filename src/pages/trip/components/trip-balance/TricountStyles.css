@@ -1,0 +1,237 @@
+.tricount-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.tricount-container h1 {
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.tricount-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.left-panel {
+  flex: 1;
+  min-width: 300px;
+}
+
+.right-panel {
+  flex: 1.5;
+  min-width: 300px;
+}
+
+/* Form styles */
+.expense-form-container {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.expense-form-container h2 {
+  margin-top: 0;
+  color: #2c3e50;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 10px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.participants-checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.participant-checkbox {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.participant-checkbox input {
+  margin-right: 5px;
+  width: auto;
+}
+
+.submit-button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  width: 100%;
+  transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+  background-color: #2980b9;
+}
+
+/* Balance display styles */
+.balance-container {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.balance-container h2 {
+  margin-top: 0;
+  color: #2c3e50;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 10px;
+}
+
+.balance-container h3 {
+  margin-top: 15px;
+  font-size: 18px;
+  color: #34495e;
+}
+
+.individual-balances ul,
+.settlements ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.individual-balances li {
+  padding: 8px 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.individual-balances .positive {
+  color: #27ae60;
+}
+
+.individual-balances .negative {
+  color: #e74c3c;
+}
+
+.individual-balances .neutral {
+  color: #7f8c8d;
+}
+
+.settlements li {
+  padding: 8px 0;
+  line-height: 1.4;
+}
+
+/* Expense list styles */
+.expense-list-container {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.expense-list-container h2 {
+  margin-top: 0;
+  color: #2c3e50;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 10px;
+}
+
+.no-expenses {
+  color: #7f8c8d;
+  text-align: center;
+  padding: 20px;
+}
+
+.expense-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.expense-item {
+  border-bottom: 1px solid #eee;
+  padding: 15px 0;
+}
+
+.expense-item:last-child {
+  border-bottom: none;
+}
+
+.expense-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.expense-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #2c3e50;
+}
+
+.expense-amount {
+  font-weight: bold;
+  font-size: 18px;
+  color: #3498db;
+}
+
+.expense-details {
+  color: #7f8c8d;
+  font-size: 14px;
+}
+
+.expense-details p {
+  margin: 5px 0;
+}
+
+.delete-button {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 5px;
+  transition: background-color 0.3s;
+}
+
+.delete-button:hover {
+  background-color: #c0392b;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .tricount-content {
+    flex-direction: column;
+  }
+
+  .left-panel,
+  .right-panel {
+    width: 100%;
+  }
+}

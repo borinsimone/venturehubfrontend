@@ -1,3 +1,5 @@
+// Variables
+$box-shadow-heavy: 0px 2px 10px 2px rgba(0, 0, 0, 0.3);
 .home {
   height: 100vh;
   height: 100dvh;
@@ -6,6 +8,8 @@
   flex-direction: column;
   gap: 40px;
   padding: 40px 20px;
+  background-color: #f8f8f8;
+
   .top-bar {
     width: 100%;
     display: flex;
@@ -16,119 +20,134 @@
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      background-color: #ccc;
+      background-color: #e0e0e0;
       overflow: hidden;
       img {
         height: 100%;
+        width: 100%;
+        object-fit: cover;
       }
     }
     .notification {
       width: 40px;
       height: 40px;
-      border-radius: 15px;
-
+      border-radius: 40%;
+      background-color: #ffffff;
       overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0px 0px 15px 0px #1e1e1e;
+      box-shadow: $box-shadow-heavy;
     }
   }
+
   .main-content {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
+
     .title {
       font-size: 30px;
-      font-weight: 600;
+      font-weight: 700;
+      color: #000;
+      line-height: 1.1;
+      margin: 0;
     }
+
     button {
       all: unset;
       text-transform: capitalize;
-      //   width: 100%;
       width: fit-content;
-      padding: 0 20px;
-      height: 50px;
-      border-radius: 10px;
-      background-color: #2d68ff;
+      padding: 5px 20px;
+
+      border-radius: 30px;
+      background-color: #4353ff;
       color: white;
-      font-size: 20px;
+      font-size: 16px;
       font-weight: 600;
       display: flex;
       align-items: center;
       justify-content: center;
+      cursor: pointer;
+      box-shadow: 0px 4px 10px rgba(67, 83, 255, 0.3);
     }
+
     .input-wrapper {
       width: 100%;
       height: 50px;
-      border-radius: 10px;
-
+      border-radius: 15px;
+      background-color: #fff;
       display: flex;
       align-items: center;
-
       gap: 20px;
       position: relative;
-      box-shadow: 0px 0px 15px 0px #1e1e1e;
+      box-shadow: $box-shadow-heavy;
 
       input {
         all: unset;
         padding: 0 20px;
         width: 100%;
-
         height: 100%;
-        font-size: 20px;
-        font-weight: 600;
-        color: #1e1e1e;
+        font-size: 16px;
+        font-weight: 400;
+        color: #333;
         &::placeholder {
-          color: #ccc;
-          text-transform: capitalize;
+          color: #aaa;
         }
       }
     }
   }
+
   .popular {
     display: flex;
     flex-direction: column;
-    align-items: center;
 
     .title {
-      font-size: 24px;
+      font-size: 20px;
       font-weight: 600;
       width: 100%;
+      margin: 0;
     }
+
     .slider {
-      width: 100vw;
+      width: calc(100% + 40px);
+      margin-left: -20px;
       display: flex;
       align-items: center;
       justify-content: start;
-      gap: 20px;
+      gap: 15px;
       overflow-x: auto;
-      padding: 20px 0;
-      padding-left: 20px;
+      padding: 10px 20px;
+
       .popular-card {
-        width: 200px;
-        height: 80px;
+        min-width: 120px;
+        height: 40px;
         display: flex;
+        justify-content: center;
         align-items: center;
-        border-radius: 15px;
+        border-radius: 10px;
         gap: 10px;
-        box-shadow: 0px 0px 15px 0px #1e1e1e;
-        padding: 0 10px;
+        background-color: #fff;
+        box-shadow: $box-shadow-heavy;
+
         .popular-card-image {
           display: flex;
           align-items: center;
           justify-content: center;
+
           img {
-            height: 60px;
-            aspect-ratio: 1/1;
-            border-radius: 10px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
           }
         }
 
         h3 {
-          font-size: 20px;
-          font-weight: 600;
-          text-transform: capitalize;
+          font-size: 14px;
+          font-weight: 500;
+          margin: 0;
+          white-space: nowrap;
         }
       }
 
@@ -137,144 +156,80 @@
       }
     }
   }
+
   .planned {
     display: flex;
     flex-direction: column;
-    align-items: center;
 
     .title {
-      font-size: 1.25rem;
+      font-size: 20px;
       font-weight: 600;
-
       width: 100%;
+      margin: 0;
+      display: flex;
+      gap: 15px;
+
       span {
         cursor: pointer;
-
-        text-transform: capitalize;
         transition: 300ms;
         &.active {
-          transform: scale(1.3);
+          color: #000;
+          font-weight: 600;
         }
-
         &.inactive {
-          color: #ccc;
-          transform: scale(1);
+          color: #aaa;
+          font-weight: 400;
         }
       }
     }
+
     .next-slider {
-      width: 100vw;
+      width: calc(100% + 40px);
+      margin-left: -20px;
       display: flex;
       align-items: center;
-      gap: 20px;
-      padding: 20px 10px;
-      padding-left: 20px;
+      gap: 15px;
+      padding: 10px 20px;
       overflow: visible;
       overflow-x: auto;
+
       &::-webkit-scrollbar {
         display: none;
       }
+
       .trip-card {
+        min-width: 150px;
         display: flex;
         flex-direction: column;
         gap: 10px;
-        box-shadow: 0px 0px 15px 0px #1e1e1e;
-        padding: 10px;
-        border-radius: 8px;
-        img {
-          height: 150px;
-          aspect-ratio: 1/1;
-          border-radius: 10px;
-        }
-        .text-wrapper {
-          position: relative;
-
-          .title {
-            font-size: 20px;
-            font-weight: 600;
-            text-transform: capitalize;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-          }
-          .date {
-            font-size: 16px;
-            font-weight: 600;
-            color: #ccc;
-          }
-        }
-      }
-    }
-    .prev-slider {
-      width: 100vw;
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      padding: 20px 0;
-      padding-left: 20px;
-      overflow: visible;
-      overflow-x: auto;
-      &::-webkit-scrollbar {
-        display: none;
-      }
-      .trip-card {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        box-shadow: 0px 0px 15px 0px rgba(30, 30, 30, 0.8); // Slightly different shadow
-        padding: 10px;
-        border-radius: 8px;
-        position: relative;
-
-        // Add a subtle past trip indicator
-        &::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: rgba(
-            0,
-            0,
-            0,
-            0.05
-          ); // Subtle overlay to indicate past trips
-          border-radius: 8px;
-          pointer-events: none;
-        }
+        background-color: #fff;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: $box-shadow-heavy;
 
         img {
+          width: 150px;
           height: 150px;
-          aspect-ratio: 1/1;
-          border-radius: 10px;
-          filter: saturate(0.9); // Slightly desaturate past trip images
+          object-fit: cover;
         }
 
         .text-wrapper {
-          position: relative;
+          padding: 10px 15px;
 
           .title {
-            font-size: 20px;
+            font-size: 16px;
             font-weight: 600;
-            text-transform: capitalize;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            margin: 0 0 5px 0;
           }
 
           .date {
-            font-size: 16px;
-            font-weight: 600;
-            color: #aaa; // Slightly lighter gray for past dates
-
-            // Add "completed" indicator
-            &::after {
-              content: '✓';
-              margin-left: 5px;
-              font-size: 14px;
-              color: #2d68ff;
-            }
+            font-size: 14px;
+            font-weight: 400;
+            color: #aaa;
+            margin: 0;
           }
         }
       }
@@ -282,7 +237,6 @@
   }
 }
 
-//tricount test stili
 // Variables
 $primary-color: #3498db;
 $secondary-color: #e74c3c;
@@ -479,6 +433,50 @@ $shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   }
 }
 
+.trip-search-wrapper {
+  position: relative;
+  margin: 12px 0;
+
+  .trip-search-input {
+    width: 100%;
+    padding: 10px 40px 10px 15px;
+    border-radius: 20px;
+    border: 1px solid #e0e0e0;
+    font-size: 14px;
+    outline: none;
+
+    &:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+    }
+  }
+
+  .trip-search-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #777;
+  }
+
+  .trip-search-clear {
+    position: absolute;
+    right: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #aaa;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0 5px;
+
+    &:hover {
+      color: #666;
+    }
+  }
+}
+
 .no-trips {
   display: flex;
   justify-content: center;
@@ -488,6 +486,7 @@ $shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   border-radius: 8px;
   color: $dark-gray;
   text-align: center;
+  margin-top: 20px;
 }
 
 @media (max-width: 600px) {
@@ -516,12 +515,13 @@ $shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     font-size: 1rem;
   }
 }
-// Add to your Home.scss file
+
 .swipeable-container {
   position: relative;
   margin-bottom: 12px;
   border-radius: 10px;
   overflow: hidden;
+
   .swipe-actions {
     position: absolute;
     top: 0;
@@ -564,11 +564,6 @@ $shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   }
 }
 
-// Update the no-trips class for better spacing
-.no-trips {
-  margin-top: 20px;
-}
-// Add to your Home.scss file
 .confirmation-overlay {
   position: fixed;
   top: 0;

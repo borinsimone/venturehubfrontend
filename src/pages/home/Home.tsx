@@ -1,17 +1,9 @@
 import { useState } from 'react';
-import {
-  FaPlus,
-  FaCog,
-  FaUserCircle,
-  FaSearch,
-  FaArchive,
-  FaTrashAlt,
-  FaExclamationTriangle,
-} from 'react-icons/fa';
+import { FaSearch, FaUserCircle, FaBell, FaChevronRight } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { motion, PanInfo, useAnimation } from 'framer-motion';
 import './Home.scss';
 import { useGlobalContext } from '../../context/GlobalContext';
+import { motion, AnimatePresence } from 'framer-motion'; // Add framer-motion import
 
 // Define trip types
 type Trip = {
@@ -27,6 +19,7 @@ type Trip = {
   }[];
   totalExpenses?: number;
   archived?: boolean;
+  completed?: boolean; // Added completed property
   mainToDo?: {
     text: string;
     checked: boolean;
@@ -63,19 +56,12 @@ type Trip = {
   }[];
 };
 
-// Define confirmation dialog type
-type ConfirmationDialogType = 'delete' | 'archive' | null;
-
 function Home() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
-  const [showSearch, setShowSearch] = useState(false);
+  const [tripSearchQuery, setTripSearchQuery] = useState(''); // New state for trip search
   const { setActiveTrip } = useGlobalContext();
-
-  // Add confirmation dialog state
-  const [confirmDialog, setConfirmDialog] =
-    useState<ConfirmationDialogType>(null);
-  const [tripToConfirm, setTripToConfirm] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<'upcoming' | 'recent'>('upcoming'); // Added state for active tab
 
   const [tripsData, setTripsData] = useState<Trip[]>([
     {
@@ -86,6 +72,7 @@ function Home() {
       date: '10 - 15 Giugno',
       startDate: '2024-06-10',
       endDate: '2024-06-15',
+      completed: false,
       participants: ['Marco', 'Giulia', 'Alessandro', 'Sofia'],
       totalExpenses: 1250.75,
       balances: [
@@ -339,6 +326,7 @@ function Home() {
       date: '20 - 22 Luglio',
       startDate: '2024-07-20',
       endDate: '2024-07-22',
+      completed: false,
       participants: ['Lorenzo', 'Chiara'],
       totalExpenses: 780.25,
       balances: [
@@ -493,6 +481,7 @@ function Home() {
       date: '5 - 10 Agosto',
       startDate: '2024-08-05',
       endDate: '2024-08-10',
+      completed: false,
       participants: ['Valeria', 'Roberto', 'Alessia'],
       totalExpenses: 1560.4,
       balances: [
@@ -639,290 +628,226 @@ function Home() {
         },
       ],
     },
+    {
+      id: '4',
+      destination: 'Londra, Regno Unito',
+      title: 'London Calling',
+      image: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad',
+      date: '15 - 20 Marzo',
+      startDate: '2024-03-15',
+      endDate: '2024-03-20',
+      completed: true,
+      participants: ['Marco', 'Luca'],
+      totalExpenses: 1120.35,
+      balances: [
+        { username: 'Tu', amount: 320.5 },
+        { username: 'Marco', amount: -150.2 },
+        { username: 'Luca', amount: -170.3 },
+      ],
+      todos: [
+        { text: 'Prenotare volo per Londra', checked: true },
+        { text: 'Prenotare hotel', checked: true },
+        { text: 'Biglietti British Museum', checked: true },
+      ],
+    },
   ]);
 
-  // Filter trips by search query and archived status
+  // Define popular destinations categories
+  const popularCategories = [
+    {
+      name: 'Montagna',
+      image: 'https://images.unsplash.com/photo-1519681393784-d120267933ba',
+    },
+    {
+      name: 'Spiaggia',
+      image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e',
+    },
+    {
+      name: 'Lago',
+      image: 'https://images.unsplash.com/photo-1439066615861-d1af74d74000',
+    },
+  ];
+
+  // Filter trips based on active tab and search query
   const filteredTrips = tripsData
-    .filter((trip) => !trip.archived)
-    .filter((trip) =>
-      trip.destination.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    .filter((trip) => {
+      // First filter by completed status based on active tab
+      const matchesTab =
+        activeTab === 'upcoming' ? !trip.completed : trip.completed;
+
+      // Then filter by search query if one exists
+      const matchesSearch =
+        tripSearchQuery.trim() === '' ||
+        trip.destination
+          .toLowerCase()
+          .includes(tripSearchQuery.toLowerCase()) ||
+        (trip.title &&
+          trip.title.toLowerCase().includes(tripSearchQuery.toLowerCase()));
+
+      return matchesTab && matchesSearch;
+    })
+    .slice(0, 3); // Take only the first 3
+
+  const handlePlanTrip = () => {
+    navigate('/dashboard/trip/new');
+  };
 
   const handleTripClick = (trip: Trip) => {
     setActiveTrip(trip);
     navigate(`/dashboard/trip/${trip.id}`);
   };
 
-  const handleCreateTrip = () => {
-    navigate('/dashboard/trip/new');
+  // Function to handle tab switching
+  const handleTabClick = (tab: 'upcoming' | 'recent') => {
+    setActiveTab(tab);
   };
 
-  // Updated to show confirmation dialog
-  const confirmDelete = (id: string) => {
-    setTripToConfirm(id);
-    setConfirmDialog('delete');
-  };
-
-  // Updated to show confirmation dialog
-  const confirmArchive = (id: string) => {
-    setTripToConfirm(id);
-    setConfirmDialog('archive');
-  };
-
-  // Actual handlers that perform the actions
-  const handleDelete = (id: string) => {
-    setTripsData((trips) => trips.filter((trip) => trip.id !== id));
-    closeConfirmDialog();
-  };
-
-  const handleArchive = (id: string) => {
-    setTripsData((trips) =>
-      trips.map((trip) => (trip.id === id ? { ...trip, archived: true } : trip))
-    );
-    closeConfirmDialog();
-  };
-
-  const closeConfirmDialog = () => {
-    setConfirmDialog(null);
-    setTripToConfirm(null);
+  // Function to clear search
+  const clearTripSearch = () => {
+    setTripSearchQuery('');
   };
 
   return (
-    <div className='tricount-home'>
-      <header className='tricount-header'>
-        <h1>VentureHub</h1>
-        <div className='header-actions'>
-          {showSearch ? (
-            <div className='search-container'>
-              <input
-                type='text'
-                placeholder='Cerca viaggio...'
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className='search-input'
-                autoFocus
-              />
-              <button
-                className='icon-button cancel-search'
-                onClick={() => {
-                  setShowSearch(false);
-                  setSearchQuery('');
-                }}
-              >
-                ✕
-              </button>
+    <div className='home'>
+      <div className='top-bar'>
+        <div className='user-img'>
+          <img
+            src='https://i.pravatar.cc/150?img=12'
+            alt='Profile'
+          />
+        </div>
+        <div className='notification'>
+          <FaBell
+            size={20}
+            color='#000'
+          />
+        </div>
+      </div>
+
+      <div className='main-content'>
+        <h1 className='title'>
+          Scopri
+          <br />
+          un nuovo mondo
+        </h1>
+        <button onClick={handlePlanTrip}>Pianifica Avventura</button>
+
+        <div className='input-wrapper'>
+          <input
+            type='text'
+            placeholder='Location, Country...'
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <FaSearch style={{ position: 'absolute', right: '20px' }} />
+        </div>
+      </div>
+
+      <div className='popular'>
+        <h2 className='title'>Popolari</h2>
+        <div className='slider'>
+          {popularCategories.map((category, index) => (
+            <div
+              key={index}
+              className='popular-card'
+            >
+              <div className='popular-card-image'>
+                <img
+                  src={category.image}
+                  alt={category.name}
+                />
+              </div>
+              <h3>{category.name}</h3>
             </div>
-          ) : (
-            <>
-              <button
-                className='icon-button'
-                onClick={() => setShowSearch(true)}
-              >
-                <FaSearch />
-              </button>
-              <button
-                className='icon-button'
-                onClick={() => navigate('/profile')}
-              >
-                <FaUserCircle />
-              </button>
-              <button
-                className='icon-button'
-                onClick={() => navigate('/settings')}
-              >
-                <FaCog />
-              </button>
-            </>
+          ))}
+        </div>
+      </div>
+
+      <div className='planned'>
+        <h2 className='title'>
+          <span
+            className={activeTab === 'upcoming' ? 'active' : 'inactive'}
+            onClick={() => handleTabClick('upcoming')}
+          >
+            Prossimi
+          </span>
+          <span
+            className={activeTab === 'recent' ? 'active' : 'inactive'}
+            onClick={() => handleTabClick('recent')}
+          >
+            Recenti
+          </span>
+        </h2>
+
+        {/* Trip search input */}
+        <div className='trip-search-wrapper'>
+          <input
+            type='text'
+            placeholder='Cerca viaggi...'
+            value={tripSearchQuery}
+            onChange={(e) => setTripSearchQuery(e.target.value)}
+            className='trip-search-input'
+          />
+          <FaSearch className='trip-search-icon' />
+          {tripSearchQuery && (
+            <button
+              className='trip-search-clear'
+              onClick={clearTripSearch}
+            >
+              ×
+            </button>
           )}
         </div>
-      </header>
 
-      <div className='trip-list-header'>
-        <h2>I tuoi viaggi</h2>
-        <button
-          className='new-trip-button'
-          onClick={handleCreateTrip}
-        >
-          <FaPlus />
-          <span>Nuovo viaggio</span>
-        </button>
-      </div>
-
-      <div className='trips-list'>
-        {filteredTrips.length > 0 ? (
-          filteredTrips.map((trip) => (
-            <SwipeableTrip
-              key={trip.id}
-              trip={trip}
-              onRequestDelete={confirmDelete}
-              onRequestArchive={confirmArchive}
-              onClick={() => handleTripClick(trip)}
-            />
-          ))
-        ) : (
-          <div className='no-trips'>
-            <p>Nessun viaggio trovato</p>
-          </div>
-        )}
-      </div>
-
-      {/* Confirmation Dialog */}
-      {confirmDialog && tripToConfirm && (
-        <div className='confirmation-overlay'>
-          <div className='confirmation-dialog'>
-            <div className='confirmation-icon'>
-              <FaExclamationTriangle />
-            </div>
-            <h3>Conferma</h3>
-            <p>
-              {confirmDialog === 'delete'
-                ? 'Sei sicuro di voler eliminare questo viaggio?'
-                : 'Sei sicuro di voler archiviare questo viaggio?'}
-            </p>
-            <p className='trip-name'>
-              {tripsData.find((t) => t.id === tripToConfirm)?.destination}
-            </p>
-            <div className='confirmation-buttons'>
-              <button
-                className='cancel-button'
-                onClick={closeConfirmDialog}
-              >
-                Annulla
-              </button>
-              <button
-                className={`confirm-button ${
-                  confirmDialog === 'delete' ? 'delete' : 'archive'
-                }`}
-                onClick={() => {
-                  if (confirmDialog === 'delete') {
-                    handleDelete(tripToConfirm);
-                  } else {
-                    handleArchive(tripToConfirm);
-                  }
-                }}
-              >
-                {confirmDialog === 'delete' ? 'Elimina' : 'Archivia'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-// Updated SwipeableTrip props to request confirmation instead of directly performing actions
-interface SwipeableTripProps {
-  trip: Trip;
-  onRequestDelete: (id: string) => void;
-  onRequestArchive: (id: string) => void;
-  onClick: () => void;
-}
-
-const SwipeableTrip: React.FC<SwipeableTripProps> = ({
-  trip,
-  onRequestDelete,
-  onRequestArchive,
-  onClick,
-}) => {
-  const controls = useAnimation();
-
-  // Modified to remove opacity changes
-  const handleDrag = (event: any, info: PanInfo) => {
-    // No longer changing opacity during drag
-  };
-
-  const handleDragEnd = async (event: any, info: PanInfo) => {
-    if (info.offset.x < -50) {
-      // Swiped left (delete)
-      // Briefly show animation at the threshold before resetting
-      await controls.start({ x: -50 });
-      onRequestDelete(trip.id);
-      // Reset position after requesting confirmation
-      controls.start({ x: 0 });
-    } else if (info.offset.x > 50) {
-      // Swiped right (archive)
-      // Briefly show animation at the threshold before resetting
-      await controls.start({ x: 50 });
-      onRequestArchive(trip.id);
-      // Reset position after requesting confirmation
-      controls.start({ x: 0 });
-    } else {
-      // Reset if not swiped far enough
-      controls.start({ x: 0 });
-    }
-  };
-
-  return (
-    <div className='swipeable-container'>
-      <div className='swipe-actions left'>
-        <FaArchive />
-        <span>Archivia</span>
-      </div>
-
-      <motion.div
-        className='trip-item'
-        drag='x'
-        // Limit drag to exactly 50px in each direction
-        dragConstraints={{ left: -50, right: 50 }}
-        dragElastic={0.5} // Reduced from 0.7 for tighter feel at boundaries
-        onDrag={handleDrag}
-        onDragEnd={handleDragEnd}
-        animate={controls}
-        initial={{ x: 0 }} // Removed opacity from initial state
-        onClick={(e) => {
-          // Only navigate if it's a click, not a swipe
-          if (Math.abs((e as any).movementX) < 5) {
-            onClick();
-          }
-        }}
-      >
-        <div className='trip-item-left'>
-          <div
-            className='trip-image'
-            style={{ backgroundImage: `url(${trip.image})` }}
-          ></div>
-          <div className='trip-details'>
-            <h3>{trip.destination}</h3>
-            <p className='trip-date'>{trip.date}</p>
-            <p className='trip-participants'>
-              {trip.participants?.slice(0, 2).join(', ')}
-              {trip.participants &&
-                trip.participants.length > 2 &&
-                ` (+${trip.participants.length - 2})`}
-            </p>
-          </div>
-        </div>
-        <div className='trip-financials'>
-          <p className='total-expenses'>€{trip.totalExpenses?.toFixed(2)}</p>
-          <p
-            className={`balance ${
-              getUserBalance(trip) > 0
-                ? 'positive'
-                : getUserBalance(trip) < 0
-                ? 'negative'
-                : ''
-            }`}
+        <AnimatePresence mode='wait'>
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, x: activeTab === 'upcoming' ? -20 : 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: activeTab === 'upcoming' ? 20 : -20 }}
+            transition={{ duration: 0.3 }}
+            className='next-slider'
           >
-            {getUserBalance(trip) > 0 ? '+' : ''}€
-            {Math.abs(getUserBalance(trip)).toFixed(2)}
-          </p>
-        </div>
-      </motion.div>
-
-      <div className='swipe-actions right'>
-        <FaTrashAlt />
-        <span>Elimina</span>
+            {filteredTrips.length > 0 ? (
+              filteredTrips.map((trip) => (
+                <div
+                  key={trip.id}
+                  className='trip-card'
+                  onClick={() => handleTripClick(trip)}
+                >
+                  <img
+                    src={trip.image}
+                    alt={trip.destination}
+                  />
+                  <div className='text-wrapper'>
+                    <h3 className='title'>
+                      {trip.destination.split(',')[0]}
+                      <FaChevronRight size={14} />
+                    </h3>
+                    <p className='date'>
+                      {trip.startDate &&
+                        new Date(trip.startDate).toLocaleDateString('it-IT', {
+                          day: 'numeric',
+                          month: 'long',
+                        })}
+                    </p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p>
+                {tripSearchQuery
+                  ? `Nessun risultato per "${tripSearchQuery}"`
+                  : `Nessun viaggio ${
+                      activeTab === 'upcoming' ? 'in programma' : 'recente'
+                    }`}
+              </p>
+            )}
+          </motion.div>
+        </AnimatePresence>
       </div>
     </div>
   );
-};
-
-// Helper function to get user's balance
-function getUserBalance(trip: Trip): number {
-  const userBalance =
-    trip.balances?.find((b) => b.username === 'Tu')?.amount || 0;
-  return userBalance;
 }
 
 export default Home;

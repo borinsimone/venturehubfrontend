@@ -35,13 +35,14 @@ import {
 } from 'react-icons/fa';
 import TripHome from './components/trip-home/TripHome';
 import { getTripById, dummyTrips } from '../../data/tripDummy';
+import LoadingTrip from './LoadingTrip';
 
 // Update the TripDetails type to match the data from Next.tsx
 type Activity = {
-  name: string;
-  icon: string;
+  name?: string;
+  icon?: string;
   time: string;
-  description: string;
+  description?: string;
   type: string;
   completed?: boolean;
 
@@ -51,6 +52,7 @@ type Activity = {
   details?: string;
   from?: string;
   to?: string;
+  location?: string;
 };
 
 type Day = {
@@ -90,7 +92,9 @@ const TripDashboard = () => {
     // If we have an activeTrip from context, use that data
     if (activeTrip && activeTrip.id === tripId) {
       setTrip(activeTrip);
-      setLoading(false);
+      setTimeout(() => {
+        setLoading(false);
+      }, 2000);
       return;
     }
 
@@ -157,32 +161,37 @@ const TripDashboard = () => {
     }
   };
 
-  // Function to render activity icon based on icon string or type
+  // Function to render the appropriate icon for an activity
   const renderActivityIcon = (activity: Activity) => {
-    const iconName = activity.icon || '';
-    const activityType = activity.type || '';
+    // Use icon property if available, or fallback to activity type
+    const iconType = activity.icon || activity.type || '';
 
-    switch (iconName.toLowerCase()) {
+    switch (iconType.toLowerCase()) {
       case 'plane':
+      case 'trasporto':
         return <FaPlane />;
       case 'hotel':
+      case 'alloggio':
         return <FaHotel />;
       case 'food':
+      case 'ristorazione':
         return <FaUtensils />;
       case 'walk':
+      case 'escursione':
         return <FaWalking />;
       case 'monument':
+      case 'cultura':
         return <FaLandmark />;
-      case 'landmark':
-        return <FaLandmark />;
-      case 'park':
-        return <FaTree />;
-      case 'shopping':
-        return <FaShoppingBag />;
-      case 'beach':
-        return <FaUmbrellaBeach />;
       case 'museum':
         return <FaUniversity />;
+      case 'park':
+      case 'natura':
+        return <FaTree />;
+      case 'beach':
+      case 'relax':
+        return <FaUmbrellaBeach />;
+      case 'shopping':
+        return <FaShoppingBag />;
       case 'city':
         return <FaBuilding />;
       case 'castle':
@@ -191,37 +200,21 @@ const TripDashboard = () => {
         return <FaBuilding />;
       case 'train':
         return <FaTrain />;
+      case 'bus':
+        return <FaBus />;
+      case 'car':
+        return <FaCar />;
       case 'boat':
         return <FaShip />;
+      case 'tempo libero':
+        return <FaCoffee />;
       default:
-        // Fallback to type-based icons if icon isn't specified
-        switch (activityType.toLowerCase()) {
-          case 'trasporto':
-            return <FaSubway />;
-          case 'alloggio':
-            return <FaHome />;
-          case 'escursione':
-            return <FaMapMarked />;
-          case 'ristorazione':
-            return <FaUtensils />;
-          case 'cultura':
-            return <FaUniversity />;
-          case 'shopping':
-            return <FaShoppingBag />;
-          case 'natura':
-            return <FaTree />;
-          case 'relax':
-            return <FaUmbrellaBeach />;
-          case 'tempo libero':
-            return <FaCoffee />;
-          default:
-            return <FaMapMarked />; // Default icon
-        }
+        return <FaMapMarked />; // Default icon
     }
   };
 
   if (loading) {
-    return <div className='loading'>Loading trip details...</div>;
+    return <LoadingTrip />;
   }
 
   if (!trip) {
@@ -287,6 +280,88 @@ const TripDashboard = () => {
       {/* Render different content based on active tab */}
       <div className='trip-content'>
         {activeTab === 'home' && <TripHome activeTrip={trip} />}
+        {activeTab === 'agenda' && (
+          <div className='trip-tab-content agenda-tab'>
+            <h2>Agenda</h2>
+            {trip.days &&
+              trip.days.map((day, dayIndex) => (
+                <div
+                  key={dayIndex}
+                  className='agenda-day'
+                >
+                  <h3 className='day-title'>
+                    Day {day.day} - {day.date}
+                  </h3>
+                  <div className='day-activities'>
+                    {day.activities.map((activity, activityIndex) => {
+                      const activityName = activity.name || activity.title;
+                      const activityDesc =
+                        activity.description || activity.details;
+                      const isPast = activity.completed;
+                      const isCurrent =
+                        !activity.completed && isCurrentActivity(activity.time);
+                      const isExpanded =
+                        expandedActivity === `${dayIndex}-${activityIndex}`;
+
+                      return (
+                        <div
+                          key={activityIndex}
+                          className={`activity-item ${
+                            isPast ? 'past-activity' : ''
+                          } ${isCurrent ? 'current-activity' : ''} ${
+                            isExpanded ? 'expanded' : ''
+                          }`}
+                          onClick={() =>
+                            toggleActivityExpansion(
+                              `${dayIndex}-${activityIndex}`
+                            )
+                          }
+                        >
+                          <div className='activity-time'>{activity.time}</div>
+                          <div className='activity-content'>
+                            <div className='activity-header'>
+                              <div className='activity-title'>
+                                <span className='activity-icon'>
+                                  {renderActivityIcon(activity)}
+                                </span>
+                                <h4>{activityName}</h4>
+                              </div>
+                              <div className='activity-indicators'>
+                                {isPast && (
+                                  <span className='completed-indicator'>
+                                    <FaCheckCircle />
+                                  </span>
+                                )}
+                                {isCurrent && (
+                                  <span className='current-indicator'>
+                                    <FaClock />
+                                  </span>
+                                )}
+                                <span className='expand-indicator'>
+                                  {isExpanded ? (
+                                    <FaChevronUp />
+                                  ) : (
+                                    <FaChevronDown />
+                                  )}
+                                </span>
+                              </div>
+                            </div>
+                            <div className='activity-type'>{activity.type}</div>
+                            {isCurrent && (
+                              <div className='current-badge'>NOW</div>
+                            )}
+
+                            {/* ...existing code for expanded content... */}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            {/* ...existing code... */}
+          </div>
+        )}
       </div>
 
       <TripNavbar

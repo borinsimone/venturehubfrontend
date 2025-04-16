@@ -1,3 +1,4 @@
+import React, { useRef, useEffect } from 'react';
 import { Day } from '../types';
 
 interface DaysNavigationProps {
@@ -11,8 +12,29 @@ function DaysNavigation({
   selectedDay,
   onSelectDay,
 }: DaysNavigationProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Scroll active tab into view when selectedDay changes
+  useEffect(() => {
+    if (containerRef.current) {
+      const activeTab = containerRef.current.children[
+        selectedDay
+      ] as HTMLElement;
+      if (activeTab) {
+        activeTab.scrollIntoView({
+          behavior: 'smooth',
+          inline: 'center',
+          block: 'nearest',
+        });
+      }
+    }
+  }, [selectedDay]);
+
   return (
-    <div className='days-navigation'>
+    <div
+      className='days-navigation'
+      ref={containerRef}
+    >
       {days.map((day, index) => (
         <div
           key={index}
