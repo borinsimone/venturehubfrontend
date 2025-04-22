@@ -431,7 +431,17 @@ function Home() {
       </div>
 
       <div className='popular'>
-        <h2 className='title'>Popolari</h2>
+        <h2 className='title'>
+          Popolari{' '}
+          <div
+            className='more'
+            onClick={() => {
+              navigate('popular-trip');
+            }}
+          >
+            Scopri di più
+          </div>
+        </h2>
         <div className='slider'>
           {popularCategories.map((category, index) => (
             <div

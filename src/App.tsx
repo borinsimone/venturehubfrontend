@@ -24,12 +24,14 @@ import Register from './pages/auth/Register';
 
 // import Profile from './pages/user/Profile';
 // import TripDashboard from './pages/trip/TripDashboard';
-import CreateTrip from './pages/trip/CreateTrip';
+import CreateTrip from './pages/trip/create/CreateTrip';
 import Dashboard from './pages/user/Dashboard';
 import { GlobalProvider } from './context/GlobalContext';
 import TripDashboard from './pages/trip/TripDashboard';
 import TripAgenda from './pages/trip/components/trip-agenda/TripAgenda';
 import TripBudget from './pages/trip/components/trip-budget/TripBudget';
+import TripSettings from './pages/trip/components/trip-settings/TripSettings';
+import Popular from './pages/home/popular/Popular';
 
 // ProtectedRoute component with TypeScript
 const ProtectedRoute = ({ children }: { children: ReactNode }) => {
@@ -63,6 +65,12 @@ function App() {
               element={<Home />}
             />
 
+            {/* Add Popular route at root level for public access */}
+            <Route
+              path='/popular-trip'
+              element={<Popular />}
+            />
+
             {/* Auth routes */}
             <Route element={<AuthLayout />}>
               <Route
@@ -88,10 +96,6 @@ function App() {
                 index
                 element={<Dashboard />}
               />
-              {/* <Route
-              path='profile'
-              element={<Profile />}
-            /> */}
               <Route
                 path='trip/new'
                 element={<CreateTrip />}
@@ -107,6 +111,10 @@ function App() {
               <Route
                 path='trip/:tripId/budget'
                 element={<TripBudget />}
+              />
+              <Route
+                path='trip/:tripId/settings'
+                element={<TripSettings />}
               />
             </Route>
 

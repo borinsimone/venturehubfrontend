@@ -32,6 +32,11 @@ import {
   FaCar,
   FaTrain,
   FaShip,
+  FaHiking,
+  FaMonument,
+  FaChurch,
+  FaCity,
+  FaMapMarkerAlt,
 } from 'react-icons/fa';
 import TripHome from './components/trip-home/TripHome';
 import { getTripById, dummyTrips } from '../../data/tripDummy';
@@ -170,47 +175,40 @@ const TripDashboard = () => {
     switch (iconType.toLowerCase()) {
       case 'plane':
       case 'trasporto':
-        return <FaPlane />;
+        return <FaPlane className='activity-icon flight' />;
       case 'hotel':
       case 'alloggio':
-        return <FaHotel />;
+        return <FaHotel className='activity-icon hotel' />;
       case 'food':
       case 'ristorazione':
-        return <FaUtensils />;
-      case 'walk':
-      case 'escursione':
-        return <FaWalking />;
-      case 'monument':
-      case 'cultura':
-        return <FaLandmark />;
-      case 'museum':
-        return <FaUniversity />;
+        return <FaUtensils className='activity-icon food' />;
       case 'park':
       case 'natura':
-        return <FaTree />;
-      case 'beach':
-      case 'relax':
-        return <FaUmbrellaBeach />;
+        return <FaTree className='activity-icon park' />;
+      case 'walk':
+      case 'escursione':
+        return <FaHiking className='activity-icon hiking' />;
+      case 'museum':
+      case 'cultura':
+        return <FaLandmark className='activity-icon museum' />;
       case 'shopping':
-        return <FaShoppingBag />;
-      case 'city':
-        return <FaBuilding />;
+        return <FaShoppingBag className='activity-icon shopping' />;
       case 'castle':
-        return <FaArchway />;
-      case 'church':
-        return <FaBuilding />;
-      case 'train':
-        return <FaTrain />;
-      case 'bus':
-        return <FaBus />;
-      case 'car':
-        return <FaCar />;
+      case 'monument':
+        return <FaMonument className='activity-icon monument' />;
       case 'boat':
-        return <FaShip />;
+        return <FaShip className='activity-icon boat' />;
+      case 'train':
+        return <FaTrain className='activity-icon train' />;
+      case 'beach':
+        return <FaUmbrellaBeach className='activity-icon beach' />;
+      case 'church':
+        return <FaChurch className='activity-icon church' />;
+      case 'city':
       case 'tempo libero':
-        return <FaCoffee />;
+        return <FaCity className='activity-icon city' />;
       default:
-        return <FaMapMarked />; // Default icon
+        return <FaMapMarkerAlt className='activity-icon' />;
     }
   };
 

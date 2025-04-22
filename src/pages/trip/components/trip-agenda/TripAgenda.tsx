@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGlobalContext } from '../../../../context/GlobalContext';
-import { motion, AnimatePresence } from 'framer-motion';
 import './TripAgenda.css';
 import TripNavbar from '../../TripNavbar';
 
@@ -88,9 +87,8 @@ function TripAgenda() {
     );
 
     if (activityIndex !== -1) {
-      // Toggle completed status
-      updatedDays[dayIndex].activities[activityIndex].completed =
-        !updatedDays[dayIndex].activities[activityIndex].completed;
+      // Always mark as completed (don't toggle)
+      updatedDays[dayIndex].activities[activityIndex].completed = true;
 
       setDays(updatedDays);
 
@@ -100,11 +98,6 @@ function TripAgenda() {
           ...activeTrip,
           days: updatedDays,
         });
-      }
-
-      // Move to next activity if not the last one
-      if (activityIndex < updatedDays[dayIndex].activities.length - 1) {
-        // Here you could implement scrolling to the next activity if needed
       }
     }
   };
@@ -139,24 +132,15 @@ function TripAgenda() {
         onSelectDay={setSelectedDay}
       />
 
-      <AnimatePresence mode='wait'>
-        <motion.div
-          key={selectedDay}
-          initial={{ opacity: 0, x: 100 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -100 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-          className='day-content'
-        >
-          <ActivityTimeline
-            activities={currentDayActivities}
-            dayIndex={selectedDay}
-            onActivityUpdate={handleActivityUpdate}
-            onActivityDelete={handleActivityDelete}
-            onActivityComplete={handleActivityComplete}
-          />
-        </motion.div>
-      </AnimatePresence>
+      <div className='day-content'>
+        <ActivityTimeline
+          activities={currentDayActivities}
+          dayIndex={selectedDay}
+          onActivityUpdate={handleActivityUpdate}
+          onActivityDelete={handleActivityDelete}
+          onActivityComplete={handleActivityComplete}
+        />
+      </div>
 
       <TripNavbar />
     </div>

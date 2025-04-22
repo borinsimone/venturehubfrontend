@@ -136,7 +136,7 @@ $box-shadow-light: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
 
   .day-activities {
-    padding: 0.75rem 1rem 6rem 1rem;
+    // padding: 0.75rem 1rem 6rem 1rem;
     overflow-y: auto;
     width: 100%;
 
@@ -172,6 +172,7 @@ $box-shadow-light: 0 2px 5px rgba(0, 0, 0, 0.1);
           background-color: white;
           border: 2px solid $timeline-color;
           z-index: 2;
+          cursor: pointer;
 
           &.completed {
             background-color: $secondary-color;
@@ -195,19 +196,44 @@ $box-shadow-light: 0 2px 5px rgba(0, 0, 0, 0.1);
           padding: 1rem;
           display: flex;
           align-items: flex-start;
-          margin-bottom: 1rem;
+
           position: relative;
-          transition: all 0.3s ease;
           z-index: 1;
+          transition: transform 0.3s ease-out, background-color 0.2s ease;
+          touch-action: pan-y;
+          will-change: transform;
+
+          &.completing {
+            background-color: rgba($secondary-color, 0.1);
+            border-left-color: $secondary-color;
+          }
 
           &.completed {
             background-color: $completed-bg;
+            opacity: 0.85;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
           }
 
           &.current {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-            z-index: 2;
+            background-color: rgba($primary-color, 0.05);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-left: 3px solid $primary-color;
+          }
+
+          .swipe-indicator {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: $secondary-color;
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            z-index: 3;
           }
 
           .activity-icon-container {
@@ -341,7 +367,7 @@ $box-shadow-light: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
 
     .day-activities {
-      padding: 0.5rem 0.75rem 5rem 0.75rem;
+      padding: 3rem 0.75rem 5rem 0.75rem;
 
       .timeline .timeline-item .activity-card {
         padding: 0.75rem;

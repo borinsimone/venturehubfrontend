@@ -97,6 +97,7 @@ $trip-white: #ffffff;
     flex-grow: 1;
 
     width: 100%;
+    padding-bottom: 5vh;
   }
 
   .trip-header {
@@ -198,8 +199,12 @@ $trip-white: #ffffff;
     background-size: cover;
     background-position: center;
     border-radius: 12px;
-    position: relative;
-    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.01);
+    }
   }
 
   &-overlay {

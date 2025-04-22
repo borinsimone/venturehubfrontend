@@ -19,7 +19,26 @@
   height: 150px;
   border-radius: 50%;
   background-color: #e9ecef;
-  background-image: radial-gradient(circle at 30% 40%, #ffffff, transparent 30%), radial-gradient(circle at 70% 60%, #ffffff, transparent 30%), linear-gradient(45deg, rgba(0, 123, 255, 0.1) 25%, transparent 25%, transparent 50%, rgba(0, 123, 255, 0.1) 50%, rgba(0, 123, 255, 0.1) 75%, transparent 75%), linear-gradient(-45deg, rgba(0, 123, 255, 0.1) 25%, transparent 25%, transparent 50%, rgba(0, 123, 255, 0.1) 50%, rgba(0, 123, 255, 0.1) 75%, transparent 75%);
+  background-image: radial-gradient(circle at 30% 40%, #ffffff, transparent 30%),
+    radial-gradient(circle at 70% 60%, #ffffff, transparent 30%),
+    linear-gradient(
+      45deg,
+      rgba(0, 123, 255, 0.1) 25%,
+      transparent 25%,
+      transparent 50%,
+      rgba(0, 123, 255, 0.1) 50%,
+      rgba(0, 123, 255, 0.1) 75%,
+      transparent 75%
+    ),
+    linear-gradient(
+      -45deg,
+      rgba(0, 123, 255, 0.1) 25%,
+      transparent 25%,
+      transparent 50%,
+      rgba(0, 123, 255, 0.1) 50%,
+      rgba(0, 123, 255, 0.1) 75%,
+      transparent 75%
+    );
   background-size: 100%, 100%, 20px 20px, 20px 20px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   animation: pulse 2s infinite;
@@ -228,7 +247,8 @@
   }
 }
 @keyframes bounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {
@@ -236,10 +256,13 @@
   }
 }
 @keyframes wave {
-  0%, 40%, 100% {
+  0%,
+  40%,
+  100% {
     transform: translateY(0);
   }
   20% {
     transform: translateY(-10px);
   }
-}/*# sourceMappingURL=LoadingTrip.css.map */
+}
+/*# sourceMappingURL=LoadingTrip.css.map */

@@ -102,6 +102,20 @@
   font-weight: 600;
   width: 100%;
   margin: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.home .popular .title .more {
+  font-size: 14px;
+  font-weight: 400;
+  color: #aaa;
+  cursor: pointer;
+  transition: 300ms;
+}
+.home .popular .title .more:hover {
+  color: #000;
+  font-weight: 600;
 }
 .home .popular .slider {
   width: calc(100% + 40px);

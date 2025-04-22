@@ -76,6 +76,7 @@
 .trip-dashboard .trip-content {
   flex-grow: 1;
   width: 100%;
+  padding-bottom: 5vh;
 }
 .trip-dashboard .trip-header {
   position: sticky;
@@ -152,8 +153,11 @@
   background-size: cover;
   background-position: center;
   border-radius: 12px;
-  position: relative;
-  overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+.trip-header-image:hover {
+  transform: scale(1.01);
 }
 .trip-header-overlay {
   position: absolute;
@@ -439,4 +443,32 @@
   100% {
     opacity: 1;
   }
+}
+.home-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  z-index: 10;
+  background-color: rgba(255, 255, 255, 0.85);
+  color: #333;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+.home-button:hover, .home-button:focus {
+  background-color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.home-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
 }/*# sourceMappingURL=trip.css.map */

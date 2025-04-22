@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { Activity } from '../types';
 import ActivityItem from './ActivityItem';
-import { FaPlus } from 'react-icons/fa';
 
 interface ActivityTimelineProps {
   activities: Activity[];
@@ -20,64 +18,111 @@ function ActivityTimeline({
   onActivityComplete,
 }: ActivityTimelineProps) {
   const [items, setItems] = useState<Activity[]>([]);
+  const [nextActivityId, setNextActivityId] = useState<string | null>(null);
 
   // Update items when activities change
   useEffect(() => {
     if (Array.isArray(activities)) {
-      setItems([...activities]);
+      // Sort activities by time
+      const sortedActivities = [...activities].sort((a, b) => {
+        return (
+          timeToMinutes(a.time || '0:00') - timeToMinutes(b.time || '0:00')
+        );
+      });
+
+      setItems(sortedActivities);
+      // Determine current activity when activities change
+      findCurrentActivity(sortedActivities);
     } else {
       setItems([]);
     }
   }, [activities]);
 
-  const getCurrentActivity = () => {
-    if (!items || items.length === 0) return null;
+  // Convert time string to minutes for easier comparison
+  const timeToMinutes = (timeString: string): number => {
+    if (!timeString) return 0;
 
-    const now = new Date();
-    const currentHour = now.getHours();
-    const currentMinutes = now.getMinutes();
-    const currentTime = currentHour * 60 + currentMinutes;
+    // Handle different time formats
+    let hours = 0;
+    let minutes = 0;
 
-    // Find incomplete activity closest to current time
-    const incompleteActivities = items.filter(
-      (activity) => !activity.completed
-    );
-    if (incompleteActivities.length === 0) return null;
+    // Try to parse common formats
+    if (timeString.includes(':')) {
+      const timeParts = timeString.split(':');
+      hours = parseInt(timeParts[0], 10) || 0;
+      // Extract minutes, handling cases with AM/PM
+      const minutesPart = timeParts[1].split(/\s|AM|PM/)[0];
+      minutes = parseInt(minutesPart, 10) || 0;
+    } else {
+      // If no colon, try to interpret as raw hours
+      hours = parseInt(timeString, 10) || 0;
+    }
 
-    // Convert activity times to minutes for comparison
-    const activitiesWithMinutes = incompleteActivities.map((activity) => {
-      const timeString = activity.time || '0:00';
-      const timeParts = timeString.split(' ')[0].split(':');
-      let hours = parseInt(timeParts[0]);
-      const minutes = parseInt(timeParts[1] || '0');
+    // Handle AM/PM
+    if (timeString.toUpperCase().includes('PM') && hours < 12) {
+      hours += 12;
+    } else if (timeString.toUpperCase().includes('AM') && hours === 12) {
+      hours = 0;
+    }
 
-      // Handle AM/PM
-      if (timeString.includes('PM') && hours < 12) {
-        hours += 12;
-      } else if (timeString.includes('AM') && hours === 12) {
-        hours = 0;
-      }
-
-      return {
-        ...activity,
-        timeInMinutes: hours * 60 + minutes,
-      };
-    });
-
-    // Sort by closest to current time
-    activitiesWithMinutes.sort((a, b) => {
-      const diffA = Math.abs(a.timeInMinutes - currentTime);
-      const diffB = Math.abs(b.timeInMinutes - currentTime);
-      return diffA - diffB;
-    });
-
-    return activitiesWithMinutes[0].id;
+    return hours * 60 + minutes;
   };
 
-  const currentActivityId = getCurrentActivity();
+  // Find the activity right after the last completed one
+  const findCurrentActivity = (activityList: Activity[]) => {
+    if (!activityList || activityList.length === 0) {
+      setNextActivityId(null);
+      return;
+    }
 
+    // Get all completed activities
+    const completedActivities = activityList.filter((a) => a.completed);
+
+    // If no completed activities, first one is current
+    if (completedActivities.length === 0) {
+      setNextActivityId(activityList[0].id);
+      return;
+    }
+
+    // If all activities are completed, none is current
+    if (completedActivities.length === activityList.length) {
+      setNextActivityId(null);
+      return;
+    }
+
+    // Find the index of the last completed activity in the sorted list
+    let lastCompletedIndex = -1;
+    for (let i = activityList.length - 1; i >= 0; i--) {
+      if (activityList[i].completed) {
+        lastCompletedIndex = i;
+        break;
+      }
+    }
+
+    // Set the activity right after the last completed one as current
+    if (lastCompletedIndex < activityList.length - 1) {
+      setNextActivityId(activityList[lastCompletedIndex + 1].id);
+    } else {
+      // All activities are completed or something went wrong
+      setNextActivityId(null);
+    }
+  };
+
+  // Handle activity completion
   const handleToggleComplete = (activityId: string) => {
+    // Call the parent component's completion handler
     onActivityComplete(activityId, dayIndex);
+
+    // Create a new array with the completed activity marked as completed
+    const updatedActivities = items.map((item) =>
+      item.id === activityId ? { ...item, completed: true } : item
+    );
+
+    // Find the next activity immediately to update UI
+    findCurrentActivity(updatedActivities);
+
+    // Also update local items array to match the state change
+    setItems(updatedActivities);
   };
 
   // Rendering empty state
@@ -100,7 +145,7 @@ function ActivityTimeline({
           <ActivityItem
             key={activity.id}
             activity={activity}
-            isCurrent={activity.id === currentActivityId}
+            isCurrent={activity.id === nextActivityId}
             onToggleComplete={handleToggleComplete}
             onDelete={
               onActivityDelete

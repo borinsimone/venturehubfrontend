@@ -1,4 +1,5 @@
 import React from 'react';
+import { FaTrash } from 'react-icons/fa';
 
 const ExpenseList = ({ expenses, users, onDeleteExpense }) => {
   const getUserName = (userId) => {
@@ -8,21 +9,27 @@ const ExpenseList = ({ expenses, users, onDeleteExpense }) => {
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString();
+    return date.toLocaleDateString('it-IT', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
   };
 
   if (expenses.length === 0) {
     return (
       <div className='expense-list-container'>
-        <h2>Expenses</h2>
-        <p className='no-expenses'>No expenses yet. Add your first expense!</p>
+        <h2>Spese</h2>
+        <p className='no-expenses'>
+          Nessuna spesa registrata. Aggiungi la tua prima spesa!
+        </p>
       </div>
     );
   }
 
   return (
     <div className='expense-list-container'>
-      <h2>Expenses</h2>
+      <h2>Spese</h2>
       <ul className='expense-list'>
         {expenses.map((expense) => (
           <li
@@ -32,23 +39,23 @@ const ExpenseList = ({ expenses, users, onDeleteExpense }) => {
             <div className='expense-header'>
               <h3>{expense.description}</h3>
               <span className='expense-amount'>
-                ${expense.amount.toFixed(2)}
+                €{expense.amount.toFixed(2)}
               </span>
             </div>
             <div className='expense-details'>
               <p>
-                Paid by: <strong>{getUserName(expense.paidBy)}</strong> •{' '}
+                Pagato da: <strong>{getUserName(expense.paidBy)}</strong> •{' '}
                 {formatDate(expense.date)}
               </p>
               <p>
-                Participants:{' '}
+                Partecipanti:{' '}
                 {expense.participants.map((id) => getUserName(id)).join(', ')}
               </p>
               <button
                 className='delete-button'
                 onClick={() => onDeleteExpense(expense.id)}
               >
-                Delete
+                <FaTrash /> Elimina
               </button>
             </div>
           </li>
