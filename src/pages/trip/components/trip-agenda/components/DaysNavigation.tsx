@@ -1,4 +1,5 @@
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { Day } from '../types';
 
 interface DaysNavigationProps {
@@ -31,22 +32,32 @@ function DaysNavigation({
   }, [selectedDay]);
 
   return (
-    <div
+    <motion.div
       className='days-navigation'
       ref={containerRef}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.1, duration: 0.3 }}
     >
       {days.map((day, index) => (
-        <div
+        <motion.div
           key={index}
           className={`day-tab ${selectedDay === index ? 'active' : ''}`}
           onClick={() => onSelectDay(index)}
+          whileTap={{ scale: 0.95 }}
         >
           <div className='day-number'>Giorno {day.day}</div>
           <div className='day-date'>{day.date}</div>
-          {selectedDay === index && <div className='active-indicator'></div>}
-        </div>
+          {selectedDay === index && (
+            <motion.div
+              className='active-indicator'
+              layoutId='activeIndicator'
+              transition={{ duration: 0.3 }}
+            ></motion.div>
+          )}
+        </motion.div>
       ))}
-    </div>
+    </motion.div>
   );
 }
 

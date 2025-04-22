@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState, useContext } from 'react';
 import TripNavbar from './TripNavbar';
 import GlobalContext from '../../context/GlobalContext';
@@ -87,6 +87,7 @@ const TripDashboard = () => {
   const { activeTrip } = useContext(GlobalContext);
   // State to track expanded activities
   const [expandedActivity, setExpandedActivity] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // If we have an activeTrip from context, use that data
@@ -232,6 +233,16 @@ const TripDashboard = () => {
   return (
     <div className='trip-dashboard'>
       <div className='trip-header'>
+        <button
+          className='home-button'
+          onClick={() => {
+            navigate('/');
+          }}
+          aria-label='Go to home page'
+        >
+          <FaHome />
+        </button>
+
         <div
           className='trip-header-image'
           style={{
@@ -245,7 +256,6 @@ const TripDashboard = () => {
             </p>
           </div>
         </div>
-
         <div className='trip-header-stats'>
           <div className='stat-item'>
             <FaUsers className='stat-icon' />

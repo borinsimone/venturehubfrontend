@@ -94,6 +94,14 @@
   font-weight: 500;
   color: #2c3e50;
 }
+.trip-home-container .event-card .event-info.empty-events {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+  color: #95a5a6;
+  font-style: italic;
+}
 .trip-home-container .balance-card .balance-total {
   background-color: rgba(0, 0, 0, 0.04);
   padding: 0.75rem;
@@ -118,11 +126,19 @@
 .trip-home-container .balance-card .balance-list .balance-item:last-child {
   border-bottom: none;
 }
-.trip-home-container .balance-card .balance-list .balance-item.positive span:last-child {
+.trip-home-container
+  .balance-card
+  .balance-list
+  .balance-item.positive
+  span:last-child {
   color: #2ecc71;
   font-weight: 600;
 }
-.trip-home-container .balance-card .balance-list .balance-item.negative span:last-child {
+.trip-home-container
+  .balance-card
+  .balance-list
+  .balance-item.negative
+  span:last-child {
   color: #e74c3c;
   font-weight: 600;
 }
@@ -143,10 +159,10 @@
 .trip-home-container .todo-card .todo-list .todo-item:hover {
   background-color: rgba(0, 0, 0, 0.04);
 }
-.trip-home-container .todo-card .todo-list .todo-item input[type=checkbox] {
+.trip-home-container .todo-card .todo-list .todo-item input[type='checkbox'] {
   -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
+  -moz-appearance: none;
+  appearance: none;
   width: 18px;
   height: 18px;
   border: 2px solid #3498db;
@@ -156,12 +172,20 @@
   justify-content: center;
   cursor: pointer;
 }
-.trip-home-container .todo-card .todo-list .todo-item input[type=checkbox]:checked {
+.trip-home-container
+  .todo-card
+  .todo-list
+  .todo-item
+  input[type='checkbox']:checked {
   background-color: #3498db;
   position: relative;
 }
-.trip-home-container .todo-card .todo-list .todo-item input[type=checkbox]:checked::after {
-  content: "✓";
+.trip-home-container
+  .todo-card
+  .todo-list
+  .todo-item
+  input[type='checkbox']:checked::after {
+  content: '✓';
   color: white;
   font-size: 0.75rem;
   position: absolute;
@@ -200,4 +224,4 @@
   .trip-home-container .overview-card {
     padding: 1.5rem;
   }
-}/*# sourceMappingURL=TripHome.css.map */
+} /*# sourceMappingURL=TripHome.css.map */

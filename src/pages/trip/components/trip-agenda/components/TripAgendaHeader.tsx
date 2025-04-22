@@ -1,5 +1,6 @@
-import { FaArrowLeft } from 'react-icons/fa';
+import { FaArrowLeft, FaHome } from 'react-icons/fa';
 import { Trip } from '../types';
+import { useNavigate } from 'react-router-dom';
 
 interface TripAgendaHeaderProps {
   trip: Trip;
@@ -12,6 +13,7 @@ function TripAgendaHeader({ trip, onGoBack }: TripAgendaHeaderProps) {
       <button
         className='back-button'
         onClick={onGoBack}
+        aria-label='Go back'
       >
         <FaArrowLeft />
       </button>

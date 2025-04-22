@@ -1,26 +1,37 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGlobalContext } from '../../../../context/GlobalContext';
-import './TripAgenda.scss';
+import { motion, AnimatePresence } from 'framer-motion';
+import './TripAgenda.css';
 import TripNavbar from '../../TripNavbar';
 
-// Importazione componenti
 import TripAgendaHeader from './components/TripAgendaHeader';
 import DaysNavigation from './components/DaysNavigation';
 import ActivityTimeline from './components/ActivityTimeline';
 
-// Importazione tipi
 import { Day } from './types';
 
 function TripAgenda() {
-  const { activeTrip } = useGlobalContext();
+  const { activeTrip, updateTrip } = useGlobalContext();
   const navigate = useNavigate();
   const [selectedDay, setSelectedDay] = useState(0);
+  const [days, setDays] = useState<Day[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Reset selected day when trip changes
+  // Reset selected day when trip changes and set loading state
   useEffect(() => {
-    setSelectedDay(0);
+    setIsLoading(true);
+    if (activeTrip?.days) {
+      setDays([...activeTrip.days]);
+      setSelectedDay(0);
+    }
+    setIsLoading(false);
   }, [activeTrip?.id]);
+
+  // Non fare rendering fino a quando non siamo sicuri che i dati siano caricati
+  if (isLoading) {
+    return <div className='loading'>Caricamento...</div>;
+  }
 
   // Check if activeTrip exists and if it has days array
   if (!activeTrip || !activeTrip.days || activeTrip.days.length === 0) {
@@ -36,17 +47,90 @@ function TripAgenda() {
     );
   }
 
-  const days: Day[] = activeTrip.days;
+  // Verifica che selectedDay sia valido
+  if (selectedDay >= days.length) {
+    setSelectedDay(0);
+    return null; // Avoid rendering with invalid selectedDay
+  }
 
-  const handleGoBack = () => {
-    navigate(-1);
+  // Verifica che il giorno selezionato abbia activities
+  const currentDayActivities = days[selectedDay]?.activities || [];
+
+  const handleActivityUpdate = (updatedActivity, dayIndex) => {
+    const updatedDays = [...days];
+    const activityIndex = updatedDays[dayIndex].activities.findIndex(
+      (a) => a.id === updatedActivity.id
+    );
+
+    if (activityIndex !== -1) {
+      // Update existing activity
+      updatedDays[dayIndex].activities[activityIndex] = updatedActivity;
+    } else {
+      // Add new activity
+      updatedDays[dayIndex].activities.push(updatedActivity);
+    }
+
+    setDays(updatedDays);
+
+    // Update the trip in the global context
+    if (activeTrip) {
+      updateTrip({
+        ...activeTrip,
+        days: updatedDays,
+      });
+    }
+  };
+
+  const handleActivityComplete = (activityId, dayIndex) => {
+    const updatedDays = [...days];
+    const activityIndex = updatedDays[dayIndex].activities.findIndex(
+      (a) => a.id === activityId
+    );
+
+    if (activityIndex !== -1) {
+      // Toggle completed status
+      updatedDays[dayIndex].activities[activityIndex].completed =
+        !updatedDays[dayIndex].activities[activityIndex].completed;
+
+      setDays(updatedDays);
+
+      // Update the trip in the global context
+      if (activeTrip) {
+        updateTrip({
+          ...activeTrip,
+          days: updatedDays,
+        });
+      }
+
+      // Move to next activity if not the last one
+      if (activityIndex < updatedDays[dayIndex].activities.length - 1) {
+        // Here you could implement scrolling to the next activity if needed
+      }
+    }
+  };
+
+  const handleActivityDelete = (activityId, dayIndex) => {
+    const updatedDays = [...days];
+    updatedDays[dayIndex].activities = updatedDays[dayIndex].activities.filter(
+      (a) => a.id !== activityId
+    );
+
+    setDays(updatedDays);
+
+    // Update the trip in the global context
+    if (activeTrip) {
+      updateTrip({
+        ...activeTrip,
+        days: updatedDays,
+      });
+    }
   };
 
   return (
     <div className='trip-agenda'>
       <TripAgendaHeader
         trip={activeTrip}
-        onGoBack={handleGoBack}
+        onGoBack={() => navigate(-1)}
       />
 
       <DaysNavigation
@@ -55,7 +139,24 @@ function TripAgenda() {
         onSelectDay={setSelectedDay}
       />
 
-      <ActivityTimeline activities={days[selectedDay].activities} />
+      <AnimatePresence mode='wait'>
+        <motion.div
+          key={selectedDay}
+          initial={{ opacity: 0, x: 100 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -100 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+          className='day-content'
+        >
+          <ActivityTimeline
+            activities={currentDayActivities}
+            dayIndex={selectedDay}
+            onActivityUpdate={handleActivityUpdate}
+            onActivityDelete={handleActivityDelete}
+            onActivityComplete={handleActivityComplete}
+          />
+        </motion.div>
+      </AnimatePresence>
 
       <TripNavbar />
     </div>
